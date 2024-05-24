@@ -9,20 +9,20 @@ from bs4 import BeautifulSoup
 
 @extend_schema_view(
     upload_file=extend_schema(
-        summary="Upload XML file and parse cars",
+        summary="Загрузка XML файла и парсинг автомобилей",
         request=UploadFileSerializer,
         responses={200: CarSerializer(many=True)}
     ),
     list_cars=extend_schema(
-        summary="List all parsed cars",
+        summary="Список всех распарсенных автомобилей",
         responses={200: CarSerializer(many=True)}
     ),
     clear_cars=extend_schema(
-        summary="Clear parsed cars",
-        responses={200: 'Successfully cleared cars', 500: 'Clearing failed'}
+        summary="Очистка распарсенных автомобилей",
+        responses={200: 'Успешно очищено', 500: 'Ошибка очистки'}
     ),
     retrieve_car=extend_schema(
-        summary="Retrieve a car by index",
+        summary="Получить автомобиль по индексу",
         responses={200: CarSerializer}
     )
 )
@@ -63,7 +63,7 @@ class CarViewSet(viewsets.ViewSet):
         # DELETE /api/cars/clear/
         if request.method == 'DELETE':
             CarViewSet.cars = []
-            return Response("Successfully cleared cars", status=status.HTTP_200_OK)
+            return Response("Успешно очищено", status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -74,6 +74,6 @@ class CarViewSet(viewsets.ViewSet):
                 car = CarViewSet.cars[int(pk)]
                 return Response(CarSerializer(car).data, status=status.HTTP_200_OK)
             except (IndexError, ValueError):
-                return Response("Car not found", status=status.HTTP_404_NOT_FOUND)
+                return Response("Автомобиль не найден", status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
